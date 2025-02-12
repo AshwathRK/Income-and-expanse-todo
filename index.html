@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Saira:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="Style.css">
+    <script src="index.js"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="icon" href="Asserts/todo-icon.png">
+</head>
+
+<body>
+    <div class="toDo w-screen h-screen flex">
+        <header class="header h-full bg-blue-100">
+            <div class="logoWithTitle flex items-center justify-around cursor-pointer">
+                <img src="Asserts/todo-icon.png" class="titleImg">
+                <h1 class="poppins-bold font-grad">To Do</H1>
+            </div>
+
+            <div class="menusCons">
+                <a href="#" class="poppins-semibold px-3 menu w-full h-12 flex items-center">Dashboard</a>
+            </div>
+        </header>
+        <div class="container bg-blue-50 flex flex-col items-center">
+            <div class="title bg-blue-300 flex items-center justify-between">
+                <h1 class="poppins-semibold flex justify-center items-center uppercase text-lg">
+                    <img src="Asserts/growth.png" class="w-8 mx-2 addNewImage">
+                    Track your income and expenses</h1>
+                <button id="reset" class="bg-purple-500 text-white cursor-pointer hover:outline-double flex items-center justify-center">
+                    <img src="Asserts/reset.svg" class="w-5 mx-1 resetImage">Reset</button>
+            </div>
+            <div class="reportCon w-full grid gap-x-15 grid-cols-3">
+                <div class="report bg-purple-300 flex items-center px-3">
+                    <img src="Asserts/profit.png" class="w-8 mx-5">
+                    <h1 class="poppins-semibold text-black">Total Income:</h1>
+                    <h1 id="totalIncome" class="poppins-semibold totalincome text-black">0</h1>
+                </div>
+                <div class="report bg-purple-300 flex items-center px-3">
+                    <img src="Asserts/poor.png" class="w-8 mx-5">
+                    <h1 class="poppins-semibold text-black">Total Expenses:</h1>
+                    <h1 id="totalExpenses" class="poppins-semibold totalincome text-black">0</h1>
+                </div>
+                <div class="report bg-purple-300 flex items-center px-3">
+                    <img src="Asserts/balancing-scale.png" class="w-8 mx-5">
+                    <h1 class="poppins-semibold text-black">Net Balance:</h1>
+                    <h1 id=" netBalance" class="poppins-semibold totalincome text-black">0</h1>
+                </div>
+            </div>
+
+            <div id="inputForm" class="ConBtn w-full flex px-9 items-center grid grid-rows-1 grid-cols-4">
+                <div class="addCardCon flex items-center col-span-1 relative">
+                    <button id="addCard" class="bg-purple-500 text-white hover:outline-pink-300 flex items-center justify-center" 
+                    onclick="togglePopup()">
+                        <img src="Asserts/tab.svg" class="w-4 mx-2 addNewImage">
+                        Add new</button>
+                </div>
+                <!-- <div class="inputBoxToAddNewCard col-span-3  flex items-center justify-around relative">
+                    <label for="descLabel" class="absolute descLabel bg-blue-50 poppins-semibold">Description</label>
+                    <input class="description px-3 poppins-reguler" type="text" placeholder="Enter description">
+                    <label for="amountLabel" class="absolute amountLabel bg-blue-50 poppins-semibold">Amount</label>
+                    <input class="amount px-3 poppins-reguler" type="number" placeholder="Enter the amount">
+                    <div>
+                        <input type="radio" id="income" name="fav_language" value="INCOME">
+                        <label for="income">Income</label><br>
+                        <input type="radio" id="expance" name="fav_language" value="EXPANCE">
+                        <label for="expance">Expance</label><br>
+                    </div>
+                    <div class="h-full flex flex-col justify-around btnSubmitandCancel">
+                        <button id="submitBtn" class="bg-purple-500 outline-pink-300 text-white hover:outline-double">Submit</button>
+                        <button id="cancelBtn" class="text-red-50 outline-blue-500 bg-blue-600 hover:outline-double"
+                            onclick="cancelCard()">Cancel</button>
+                    </div>
+                </div> -->
+
+
+            </div>
+
+            <div class="cardContainer bg-blue-100">
+                <div class="title bg-blue-400 flex justify-between items-center grid grid-cols-5">
+                    <h2 class="cardNOTiltle poppins-bold">Card No</h2>
+                    <h2 class="transactionTypeTitle poppins-bold">Transaction Type</h2>
+                    <h2 class="descriptionTitle poppins-bold">Description</h2>
+                    <h2 class="amountTitle poppins-bold">Amount</h2>
+                    <h2 class="statusTitle poppins-bold">Status</h2>
+                </div>
+                <div class="content">
+                    <div class="tableCondent flex justify-between items-center grid grid-cols-5 bg-blue-200">
+                        <h2 class="cardNO">1</h2>
+                        <h2 class="transactionType">Income</h2>
+                        <h2 class="transactionType">Homeplan</h2>
+                        <h2 class="transactionType">250</h2>
+                        <div class="actionBtnCon flex justify-around">
+                            <button id="edit" class="actionButtons"><img src="Asserts/edit.svg"></button>
+                            <button id="delete" class="actionButtons"><img src="Asserts/delete.svg"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
