@@ -315,11 +315,10 @@ html {
 
                         .actionButtons {
                             cursor: pointer;
-
+                            height: 100%;
                             img {
                                 height: 20px;
                                 transition: height 0.15s;
-
                             }
                         }
 

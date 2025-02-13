@@ -9,7 +9,7 @@ function togglePopup() {
                         <input type="radio" class='radioIncome' id="income" name="fav_language" value="INCOME">
                         <label for="income">Income</label><br>
                         <input type="radio" class='radioExpance' id="expance" name="fav_language" value="EXPANCE">
-                        <label for="expance">Expance</label><br>
+                        <label for="expance">Expense</label><br>
                     </div>
                     <div class="h-full flex flex-col justify-around btnSubmitandCancel">
                         <button id="submitBtn" class="bg-purple-500 outline-pink-300 text-white hover:outline-double" onclick="getTheValues()">Submit</button>
@@ -31,14 +31,37 @@ function cancelCard() {
 
 var cardDetails = [];
 var cardNo = 0;
-var lenthOfCurentCard = 0
+var lengthOfCurrentCard = 0;
 
-function addNewCard(){
-    for (let index = lenthOfCurentCard; index < cardDetails.length; index++) {
-        console.log(cardDetails[index]);
-        lenthOfCurentCard=lenthOfCurentCard+1;
+function addNewCard() {
+    let newCardInContent = "";
+
+    let tableContent = document.getElementById("contentId");
+
+    for (let index = lengthOfCurrentCard; index < cardDetails.length; index++) {
+        function validateIncome(data) {
+            return data === true ? "Income" : "Expense";
+        }
+
+        newCardInContent += `
+            <div id='tableContent${index + 1}' class="tableCondent flex justify-between items-center grid grid-cols-5 bg-blue-200">
+                <h2 class="cardNO">${cardDetails[index].id}</h2>
+                <h2 class="transactionType">${validateIncome(cardDetails[index].income)}</h2>
+                <h2 class="description">${cardDetails[index].description}</h2>
+                <h2 class="amount">${cardDetails[index].amount}</h2>
+                <div class="actionBtnCon flex justify-around">
+                    <button id="edit" class="actionButtons"><img src="Asserts/edit.svg"></button>
+                    <button id="delete" class="actionButtons"><img src="Asserts/delete.svg"></button>
+                </div>
+            </div>`;
+
+        lengthOfCurrentCard++;
     }
+
+    // Append the generated content correctly
+    tableContent.insertAdjacentHTML("beforeend", newCardInContent);
 }
+
 
 function getTheValues() {
     // Description
@@ -78,7 +101,7 @@ function getTheValues() {
     };
 
     cardDetails.push(transaction);
-    cardNo=cardNo+1;
+    cardNo = cardNo + 1;
     // console.log(cardDetails);
 
     // Clear input fields
@@ -87,4 +110,5 @@ function getTheValues() {
     incomeCheckBox.checked = false;
     expanceCheckBox.checked = false;
     addNewCard();
+    cancelCard()
 }
