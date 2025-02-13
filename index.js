@@ -19,31 +19,72 @@ function togglePopup() {
                 </div>`
 }
 
-function cancelCard(){
+function cancelCard() {
     document.getElementById('inputForm').innerHTML =
         `<div class="addCardCon flex items-center col-span-1 relative">
-                <button id="addCard" class="bg-purple-500 text-white hover:outline-pink-300" 
-                onclick="togglePopup()">Add new</button>
-            </div>`;
+                    <button id="addCard" class="bg-purple-500 text-white hover:outline-pink-300 flex items-center justify-center" 
+                    onclick="togglePopup()">
+                        <img src="Asserts/tab.svg" class="w-4 mx-2 addNewImage">
+                        Add new</button>`;
 }
 
-function getTheValues(){
 
-    //Description
+var cardDetails = [];
+var cardNo = 0;
+var lenthOfCurentCard = 0
+
+function addNewCard(){
+    for (let index = lenthOfCurentCard; index < cardDetails.length; index++) {
+        console.log(cardDetails[index]);
+        lenthOfCurentCard=lenthOfCurentCard+1;
+    }
+}
+
+function getTheValues() {
+    // Description
     let descriptionInput = document.getElementById('descInput');
     let valueFromDesc = descriptionInput.value;
-   
 
-    //Amount
+    // Amount
     let amountInput = document.getElementById('amountInput');
     let valueFromAmt = amountInput.value;
-    
-    if (valueFromDesc==null||valueFromDesc==''||valueFromAmt==null||valueFromAmt=='') {
-        window.alert('Please fill all the manditory details')
-    }
-    else{
-        console.log(valueFromDesc + valueFromAmt)
+
+    // Income
+    let incomeCheckBox = document.getElementById('income');
+    let valueOfIncomeCheckBox = incomeCheckBox.checked;
+
+    // Expense
+    let expanceCheckBox = document.getElementById('expance');
+    let valueOfexpanceCheckBox = expanceCheckBox.checked;
+
+    // Check for mandatory inputs
+    if (!valueFromDesc || !valueFromAmt) {
+        window.alert('Please fill all the mandatory details');
+        return;
     }
 
+    // Check if at least one checkbox is selected
+    if (!valueOfexpanceCheckBox && !valueOfIncomeCheckBox) {
+        window.alert('Select income or expense checkbox');
+        return;
+    }
+
+    // Push values into array
+    let transaction = {
+        id: cardNo + 1,
+        description: valueFromDesc,
+        amount: valueFromAmt,
+        income: valueOfIncomeCheckBox
+    };
+
+    cardDetails.push(transaction);
+    cardNo=cardNo+1;
+    // console.log(cardDetails);
+
+    // Clear input fields
+    descriptionInput.value = '';
+    amountInput.value = '';
+    incomeCheckBox.checked = false;
+    expanceCheckBox.checked = false;
+    addNewCard();
 }
-
