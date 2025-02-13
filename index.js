@@ -50,8 +50,8 @@ function addNewCard() {
                 <h2 class="description">${cardDetails[index].description}</h2>
                 <h2 class="amount">${cardDetails[index].amount}</h2>
                 <div class="actionBtnCon flex justify-around">
-                    <button id="edit" class="actionButtons"><img src="Asserts/edit.svg"></button>
-                    <button id="delete" class="actionButtons"><img src="Asserts/delete.svg"></button>
+                    <button onclick="editCard(${index})" id="edit${index + 1}" class="actionButtons"><img src="Asserts/edit.svg"></button>
+                    <button onclick="deleteCard(${index})" id="delete${index + 1}" class="actionButtons"><img src="Asserts/delete.svg"></button>
                 </div>
             </div>`;
 
@@ -111,4 +111,22 @@ function getTheValues() {
     expanceCheckBox.checked = false;
     addNewCard();
     cancelCard()
+}
+
+function removeItem(array, itemToRemove) {
+    const index = array.indexOf(itemToRemove);
+
+    if (index !== -1) {
+        array.splice(index, 1);
+    }
+
+}
+
+function deleteCard(value){
+    console.log(cardDetails)
+    removeItem(cardDetails, cardDetails[value])
+    let parentElementin = document.getElementById("contentId");
+    let childElement = document.getElementById(`tableContent${value+1}`);
+    parentElementin.removeChild(childElement)
+    
 }
