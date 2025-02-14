@@ -45,7 +45,7 @@ function addNewCard() {
 
         newCardInContent += `
             <div id='tableContent${index + 1}' class="tableCondent flex justify-between items-center grid grid-cols-5 bg-blue-200">
-                <h2 class="cardNO">${cardDetails[index].id}</h2>
+                <h2 id=cardNo${index+1} class="cardNO">${index+1}</h2>
                 <h2 class="transactionType">${validateIncome(cardDetails[index].income)}</h2>
                 <h2 class="description">${cardDetails[index].description}</h2>
                 <h2 class="amount">${cardDetails[index].amount}</h2>
@@ -122,11 +122,86 @@ function removeItem(array, itemToRemove) {
 
 }
 
+
+function changeID(){
+    for (let index = 0; index < cardDetails.length; index++) {
+        cardDetails[index].id=index+1
+    }
+}
+
+
+function appendTheCardNo(){
+    let updateCardAfterDelete = ''
+
+    let tableContent = document.getElementById("contentId");
+
+    for (let index = 0; index < cardDetails.length; index++) {
+
+        function validateIncome(data) {
+            return data === true ? "Income" : "Expense";
+        }
+        
+        updateCardAfterDelete += `
+            <div id='tableContent${index + 1}' class="tableCondent flex justify-between items-center grid grid-cols-5 bg-blue-200">
+                <h2 id=cardNo${index+1} class="cardNO">${cardDetails[index].id}</h2>
+                <h2 class="transactionType">${validateIncome(cardDetails[index].income)}</h2>
+                <h2 class="description">${cardDetails[index].description}</h2>
+                <h2 class="amount">${cardDetails[index].amount}</h2>
+                <div class="actionBtnCon flex justify-around">
+                    <button onclick="editCard(${index})" id="edit${index + 1}" class="actionButtons"><img src="Asserts/edit.svg"></button>
+                    <button onclick="deleteCard(${index})" id="delete${index + 1}" class="actionButtons"><img src="Asserts/delete.svg"></button>
+                </div>
+            </div>`
+    }
+
+    tableContent.innerHTML= updateCardAfterDelete;
+   
+}
+
 function deleteCard(value){
-    console.log(cardDetails)
     removeItem(cardDetails, cardDetails[value])
     let parentElementin = document.getElementById("contentId");
     let childElement = document.getElementById(`tableContent${value+1}`);
+    changeID()
     parentElementin.removeChild(childElement)
+    appendTheCardNo();
+    lengthOfCurrentCard--;
+}
+
+function editCard(cardID){
+    document.getElementById('inputForm').innerHTML =
+        `<div class="inputBoxToAddNewCard col-span-3  flex items-center justify-around relative">
+                    <label for="descLabel" class="absolute descLabel bg-blue-50 poppins-semibold">Description*</label>
+                    <input id='descInput' class="description px-3 poppins-reguler" type="text" required placeholder="Enter description">
+                    <label for="amountLabel" class="absolute amountLabel bg-blue-50 poppins-semibold">Amount*</label>
+                    <input id='amountInput' class="amount px-3 poppins-reguler" type="number" required placeholder="Enter the amount">
+                    <div class='radioInputs'>
+                        <input type="radio" class='radioIncome' id="income" name="fav_language" value="INCOME">
+                        <label for="income">Income</label><br>
+                        <input type="radio" class='radioExpance' id="expance" name="fav_language" value="EXPANCE">
+                        <label for="expance">Expense</label><br>
+                    </div>
+                    <div class="h-full flex flex-col justify-around btnSubmitandCancel">
+                        <button id="submitBtn" class="bg-purple-500 outline-pink-300 text-white hover:outline-double" onclick="updateTheValues(${cardID})">Update</button>
+                        <button id="cancelBtn" class="text-red-50 outline-blue-500 bg-blue-600 hover:outline-double"
+                            onclick="cancelCard()">Cancel</button>
+                    </div>
+                </div>`
+
+                document.getElementById('descInput').value=cardDetails[cardID].description
+                document.getElementById('amountInput').value=cardDetails[cardID].amount
+                if (cardDetails[cardID].income==true) {
+                    document.getElementById('income').checked=true;
+                }
+                else{
+                    document.getElementById('expance').checked=true;
+                }
+
+}
+
+function updateTheValues(value){
+    let updateDescriptionValue = document.getElementById('descInput').value
     
+    let updateAmountValue = document.getElementById('amountInput').value
+    console.log(updateAmountValue)
 }
