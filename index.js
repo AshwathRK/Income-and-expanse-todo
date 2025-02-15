@@ -1,3 +1,8 @@
+var cardDetails = [];
+var cardNo = 0;
+var lengthOfCurrentCard = 0;
+
+// To disply the input box when clicking the 'Add new' card button
 function togglePopup() {
     document.getElementById('inputForm').innerHTML =
         `<div class="inputBoxToAddNewCard col-span-3  flex items-center justify-around relative">
@@ -19,6 +24,7 @@ function togglePopup() {
                 </div>`
 }
 
+// Cancel button functionality
 function cancelCard() {
     document.getElementById('inputForm').innerHTML =
         `<div class="addCardCon flex items-center col-span-1 relative">
@@ -29,10 +35,7 @@ function cancelCard() {
 }
 
 
-var cardDetails = [];
-var cardNo = 0;
-var lengthOfCurrentCard = 0;
-
+// Add New Card
 function addNewCard() {
     let newCardInContent = "";
 
@@ -62,7 +65,7 @@ function addNewCard() {
     tableContent.insertAdjacentHTML("beforeend", newCardInContent);
 }
 
-
+// Get the Value from the input box
 function getTheValues() {
     // Description
     let descriptionInput = document.getElementById('descInput');
@@ -113,6 +116,8 @@ function getTheValues() {
     cancelCard()
 }
 
+
+// Get the Value from the input box
 function removeItem(array, itemToRemove) {
     const index = array.indexOf(itemToRemove);
 
@@ -159,13 +164,19 @@ function appendTheCardNo(){
 }
 
 function deleteCard(value){
-    removeItem(cardDetails, cardDetails[value])
-    let parentElementin = document.getElementById("contentId");
-    let childElement = document.getElementById(`tableContent${value+1}`);
-    changeID()
-    parentElementin.removeChild(childElement)
-    appendTheCardNo();
-    lengthOfCurrentCard--;
+
+    let deleteConfirmation = window.confirm("Are you sure you want to delete this card?")
+
+    if (deleteConfirmation==true) {
+        removeItem(cardDetails, cardDetails[value])
+        let parentElementin = document.getElementById("contentId");
+        let childElement = document.getElementById(`tableContent${value+1}`);
+        changeID()
+        parentElementin.removeChild(childElement)
+        appendTheCardNo();
+        lengthOfCurrentCard--;
+        
+    }
 }
 
 function editCard(cardID){
@@ -199,9 +210,31 @@ function editCard(cardID){
 
 }
 
-function updateTheValues(value){
+function updateTheValues(ID){
+    
     let updateDescriptionValue = document.getElementById('descInput').value
+    cardDetails[ID].description=updateDescriptionValue
     
     let updateAmountValue = document.getElementById('amountInput').value
-    console.log(updateAmountValue)
+    cardDetails[ID].amount=updateAmountValue
+
+    let incomeCheckBox = document.getElementById('income');
+    let valueOfIncomeCheckBox = incomeCheckBox.checked;
+
+    cardDetails[ID].income=valueOfIncomeCheckBox
+
+    appendTheCardNo();
+    cancelCard()
+}
+
+function resetCard(){
+    let confirmationToResetCards = window.confirm("Alert! If you reset the card, all cards will be deleted.")
+
+    if (confirmationToResetCards==true) {
+        cardDetails.length=0
+        let tableContent = document.getElementById("contentId");
+        tableContent.innerHTML=''
+    }
+
+
 }
