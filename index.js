@@ -2,6 +2,22 @@ var cardDetails = [];
 var cardNo = 0;
 var lengthOfCurrentCard = 0;
 
+var totalIncome = 0;
+var totalExapnce = 0;
+var totalNetBalance = 0;
+
+
+
+window.sessionStorage.setItem("items", JSON.stringify(cardDetails));
+debugger; 
+var storedArray = JSON.parse('[' + sessionStorage.getItem("items") + ']');
+var i;
+for (i = 0; i < storedArray.length; i++) {
+
+}
+
+
+
 // To disply the input box when clicking the 'Add new' card button
 function togglePopup() {
     document.getElementById('inputForm').innerHTML =
@@ -35,6 +51,20 @@ function cancelCard() {
 }
 
 
+//Count the total income, expance and net balance
+
+function displyTheTotalValue() {
+    for (let index = lengthOfCurrentCard - 1; index < cardDetails.length; index++) {
+        if (cardDetails[index].income) {
+            totalIncome = totalIncome + Number(cardDetails[index].amount)
+        }
+        else {
+            totalExapnce = totalExapnce + Number(cardDetails[index].amount)
+        }
+    }
+    totalNetBalance = totalIncome - totalExapnce
+}
+
 // Add New Card
 function addNewCard() {
     let newCardInContent = "";
@@ -48,7 +78,7 @@ function addNewCard() {
 
         newCardInContent += `
             <div id='tableContent${index + 1}' class="tableCondent flex justify-between items-center grid grid-cols-5 bg-blue-200">
-                <h2 id=cardNo${index+1} class="cardNO">${index+1}</h2>
+                <h2 id=cardNo${index + 1} class="cardNO">${index + 1}</h2>
                 <h2 class="transactionType">${validateIncome(cardDetails[index].income)}</h2>
                 <h2 class="description">${cardDetails[index].description}</h2>
                 <h2 class="amount">${cardDetails[index].amount}</h2>
@@ -59,6 +89,10 @@ function addNewCard() {
             </div>`;
 
         lengthOfCurrentCard++;
+        displyTheTotalValue()
+        document.getElementById('totalIncome').innerText = totalIncome;
+        document.getElementById('totalExpense').innerText = totalExapnce;
+        document.getElementById('netBalance').innerText = totalNetBalance;
     }
 
     // Append the generated content correctly
@@ -128,14 +162,14 @@ function removeItem(array, itemToRemove) {
 }
 
 
-function changeID(){
+function changeID() {
     for (let index = 0; index < cardDetails.length; index++) {
-        cardDetails[index].id=index+1
+        cardDetails[index].id = index + 1
     }
 }
 
 
-function appendTheCardNo(){
+function appendTheCardNo() {
     let updateCardAfterDelete = ''
 
     let tableContent = document.getElementById("contentId");
@@ -145,10 +179,10 @@ function appendTheCardNo(){
         function validateIncome(data) {
             return data === true ? "Income" : "Expense";
         }
-        
+
         updateCardAfterDelete += `
             <div id='tableContent${index + 1}' class="tableCondent flex justify-between items-center grid grid-cols-5 bg-blue-200">
-                <h2 id=cardNo${index+1} class="cardNO">${cardDetails[index].id}</h2>
+                <h2 id=cardNo${index + 1} class="cardNO">${cardDetails[index].id}</h2>
                 <h2 class="transactionType">${validateIncome(cardDetails[index].income)}</h2>
                 <h2 class="description">${cardDetails[index].description}</h2>
                 <h2 class="amount">${cardDetails[index].amount}</h2>
@@ -159,27 +193,33 @@ function appendTheCardNo(){
             </div>`
     }
 
-    tableContent.innerHTML= updateCardAfterDelete;
-   
+    tableContent.innerHTML = updateCardAfterDelete;
+
 }
 
-function deleteCard(value){
+function deleteCard(value) {
 
     let deleteConfirmation = window.confirm("Are you sure you want to delete this card?")
 
-    if (deleteConfirmation==true) {
+    if (deleteConfirmation == true) {
         removeItem(cardDetails, cardDetails[value])
         let parentElementin = document.getElementById("contentId");
-        let childElement = document.getElementById(`tableContent${value+1}`);
+        let childElement = document.getElementById(`tableContent${value + 1}`);
         changeID()
         parentElementin.removeChild(childElement)
         appendTheCardNo();
         lengthOfCurrentCard--;
-        
+        totalIncome = 0;
+        totalExapnce = 0;
+        totalNetBalance = 0;
+        displyTheTotalValue()
+        document.getElementById('totalIncome').innerText = totalIncome;
+        document.getElementById('totalExpense').innerText = totalExapnce;
+        document.getElementById('netBalance').innerText = totalNetBalance;
     }
 }
 
-function editCard(cardID){
+function editCard(cardID) {
     document.getElementById('inputForm').innerHTML =
         `<div class="inputBoxToAddNewCard col-span-3  flex items-center justify-around relative">
                     <label for="descLabel" class="absolute descLabel bg-blue-50 poppins-semibold">Description*</label>
@@ -199,42 +239,53 @@ function editCard(cardID){
                     </div>
                 </div>`
 
-                document.getElementById('descInput').value=cardDetails[cardID].description
-                document.getElementById('amountInput').value=cardDetails[cardID].amount
-                if (cardDetails[cardID].income==true) {
-                    document.getElementById('income').checked=true;
-                }
-                else{
-                    document.getElementById('expance').checked=true;
-                }
+    document.getElementById('descInput').value = cardDetails[cardID].description
+    document.getElementById('amountInput').value = cardDetails[cardID].amount
+    if (cardDetails[cardID].income == true) {
+        document.getElementById('income').checked = true;
+    }
+    else {
+        document.getElementById('expance').checked = true;
+    }
 
 }
 
-function updateTheValues(ID){
-    
+function updateTheValues(ID) {
+
     let updateDescriptionValue = document.getElementById('descInput').value
-    cardDetails[ID].description=updateDescriptionValue
-    
+    cardDetails[ID].description = updateDescriptionValue
+
     let updateAmountValue = document.getElementById('amountInput').value
-    cardDetails[ID].amount=updateAmountValue
+    cardDetails[ID].amount = updateAmountValue
 
     let incomeCheckBox = document.getElementById('income');
     let valueOfIncomeCheckBox = incomeCheckBox.checked;
 
-    cardDetails[ID].income=valueOfIncomeCheckBox
+    cardDetails[ID].income = valueOfIncomeCheckBox
 
     appendTheCardNo();
     cancelCard()
 }
 
-function resetCard(){
-    let confirmationToResetCards = window.confirm("Alert! If you reset the card, all cards will be deleted.")
+function resetCard() {
 
-    if (confirmationToResetCards==true) {
-        cardDetails.length=0
-        let tableContent = document.getElementById("contentId");
-        tableContent.innerHTML=''
+    if (cardDetails.length == 0) {
+        window.alert("No card in the table!")
+    } else {
+
+        let confirmationToResetCards = window.confirm("Alert! If reset the card, all cards will be deleted.")
+
+        if (confirmationToResetCards == true) {
+            cardDetails.length = 0
+            let tableContent = document.getElementById("contentId");
+            tableContent.innerHTML = ''
+            totalIncome = 0;
+            totalExapnce = 0;
+            totalNetBalance = 0;
+            document.getElementById('totalIncome').innerText = totalIncome;
+            document.getElementById('totalExpense').innerText = totalExapnce;
+            document.getElementById('netBalance').innerText = totalNetBalance;
+        }
     }
-
-
 }
+
