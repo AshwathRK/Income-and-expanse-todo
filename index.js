@@ -9,7 +9,6 @@ var totalNetBalance = 0;
 
 
 window.sessionStorage.setItem("items", JSON.stringify(cardDetails));
-debugger; 
 var storedArray = JSON.parse('[' + sessionStorage.getItem("items") + ']');
 var i;
 for (i = 0; i < storedArray.length; i++) {
